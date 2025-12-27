@@ -39,3 +39,8 @@ variable "max_size" {
 variable "instance_profile_name" {
   type = string
 }
+
+variable "alb_security_group_id" {
+  description = "Security group ID of the ALB"
+  type        = string
+}
