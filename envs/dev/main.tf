@@ -37,7 +37,7 @@ module "asg" {
   subnet_ids = module.networking.public_subnet_ids
 
   instance_type    = "t3.micro"
-  desired_capacity = 3
+  desired_capacity = 1
   min_size         = 1
   max_size         = 3
 }
@@ -53,4 +53,15 @@ module "alb" {
   vpc_id            = module.networking.vpc_id
   public_subnet_ids = module.networking.public_subnet_ids
   asg_name          = module.asg.asg_name
+}
+
+// Calle module S3
+
+module "s3" {
+  source = "../../modules/s3"
+
+  project_name = "terraform-aws-stack"
+  environment  = "dev"
+
+  force_destroy = true
 }
