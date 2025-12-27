@@ -50,9 +50,10 @@ module "alb" {
   project_name = "terraform-aws-stack"
   environment  = "dev"
 
-  vpc_id            = module.networking.vpc_id
-  public_subnet_ids = module.networking.public_subnet_ids
-  asg_name          = module.asg.asg_name
+  vpc_id               = module.networking.vpc_id
+  public_subnet_ids    = module.networking.public_subnet_ids
+  asg_name             = module.asg.asg_name
+  alb_logs_bucket_name = module.s3.alb_logs_bucket_name //Access to logs ALB->Bucket
 }
 
 // Calle module S3

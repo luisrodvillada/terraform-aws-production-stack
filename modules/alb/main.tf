@@ -31,11 +31,18 @@ resource "aws_lb" "this" {
 
   security_groups = [aws_security_group.alb.id]
   subnets         = var.public_subnet_ids
+  //This acces_logs permit logs to bucket S3
+  access_logs {
+    bucket  = var.alb_logs_bucket_name
+    prefix  = "alb"
+    enabled = true
+  }
 
   tags = {
     Name = "${var.project_name}-${var.environment}-alb"
   }
 }
+
 
 
 //Target group
@@ -81,3 +88,8 @@ resource "aws_autoscaling_attachment" "this" {
   autoscaling_group_name = var.asg_name
   lb_target_group_arn    = aws_lb_target_group.this.arn
 }
+
+
+//Activate access logs in ALB
+
+ 
