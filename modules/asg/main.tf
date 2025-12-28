@@ -16,13 +16,6 @@ resource "aws_security_group" "asg" {
   name   = "${var.project_name}-${var.environment}-asg-sg"
   vpc_id = var.vpc_id
 
-  ingress {
-    description = "SSH"
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
 
   ingress {
     description     = "HTTP from ALB only"
