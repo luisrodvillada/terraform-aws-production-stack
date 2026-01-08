@@ -24,15 +24,14 @@ jobs:
             - name: Login to Amazon ECR
               uses: aws-actions/amazon-ecr-login@v2
 
+            - name: Set ECR image URI
+              run: echo "ECR_IMAGE=${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.ECR_REPOSITORY }}" >> $GITHUB_ENV
+
             - name: Build Docker image
-              run: |
-                  docker build -t backend:latest ./backend
+              run: docker build -t backend:latest ./backend
 
             - name: Tag Docker image
-              run: |
-                  docker tag backend:latest \
-                  ${{ secrets.ECR_REPOSITORY }}:latest
+              run: docker tag backend:latest $ECR_IMAGE:latest
 
             - name: Push Docker image to ECR
-              run: |
-                  docker push ${{ secrets.ECR_REPOSITORY }}:latest
+              run: docker push $ECR_IMAGE:latest
