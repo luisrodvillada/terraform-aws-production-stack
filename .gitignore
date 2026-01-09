@@ -8,7 +8,7 @@
 *.tfvars.json
 crash.log
 crash.*.log
-node_modules
+node_modules/
 ##################################
 # Terraform Backend Lock
 ##################################
