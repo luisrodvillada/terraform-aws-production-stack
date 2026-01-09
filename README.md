@@ -1,63 +1,182 @@
-# Terraform AWS Production Stack
+🌐 Terraform AWS Production Stack
 
-This project provisions a **production-like AWS infrastructure** using Terraform, following real-world cloud and DevOps best practices.
-
-The goal is to demonstrate a **fully reproducible, automated infrastructure and deployment workflow**, where a complete web platform can be created from scratch using a single `terraform apply`.
-
----
-
-## 🚀 Project Overview
-
-The infrastructure delivers a static web application through **EC2 instances managed by an Auto Scaling Group**, fronted by an **Application Load Balancer**.
-
-Static assets are stored in **Amazon S3** and automatically deployed to EC2 instances at launch time via **user-data**, without any manual steps or SSH access.
-
-The platform includes **observability**, **access logging**, and **cost-aware design decisions**, making it suitable as a professional portfolio project.
-
----
-
-## 🧱 Architecture
-
-### Core Components
-
-- **Networking**
-  - Custom VPC
-  - 3 public subnets
-  - 3 private subnets
-  - Multi-AZ design (eu-west-3)
-
-- **Compute**
-  - Auto Scaling Group
-  - Launch Template
-  - Spot Instances (cost optimized)
-  - Stateless EC2 instances
-
-- **Load Balancing**
-  - Application Load Balancer (HTTP)
-  - Health checks
-  - Traffic distribution across instances
-
-- **Storage**
-  - S3 bucket for static website assets
-  - S3 bucket for ALB access logs
-  - No public buckets
-
-- **IAM & Security**
-  - IAM role attached to EC2 instances
-  - Least-privilege access to S3
-  - Security Groups managed via Terraform
-
-- **Observability**
-  - ALB access logs stored in S3
-  - Infrastructure fully auditable
-
----
-
-## 🔄 Deployment Flow (End-to-End)
-
-06/01
-RDS working
-Web static working
-Next step backend
+A fully modular, production‑ready AWS infrastructure built with Terraform
+This project provisions a complete production‑grade AWS architecture using Terraform, following industry best practices for modularity, scalability, security, and maintainability.
+It is designed to simulate the type of infrastructure used in real companies, making it ideal for DevOps/Cloud Engineering portfolios.
 
 
+🚀 What This Infrastructure Includes
+🔹 VPC & Networking
+A fully isolated network layout:
+
+Custom VPC (10.0.0.0/16)
+
+Public and private subnets across multiple AZs
+
+Internet Gateway for public ingress
+
+NAT Gateway for secure outbound traffic from private subnets
+
+Route tables and associations
+
+🔹 Load Balancing & High Availability
+Application Load Balancer (ALB)
+
+Target Groups & listeners
+
+Health checks
+
+Multi‑AZ design for resilience
+
+🔹 Compute Layer
+Auto Scaling Group (ASG)
+
+Launch Template for EC2 configuration
+
+Private subnets for backend instances
+
+Security groups with least‑privilege rules
+
+🔹 State Management (Production‑Ready)
+Remote backend stored in S3
+
+State locking with DynamoDB
+
+Encrypted state files
+
+Environment‑specific state separation (dev, prod)
+
+🔹 Monitoring & Logging
+CloudWatch metrics and log groups
+
+ASG and EC2 monitoring
+
+ALB access logs (optional)
+
+🔹 Modular Architecture
+Each major component is isolated into its own Terraform module:
+
+modules/
+  vpc/
+  alb/
+  asg/
+  ec2/
+  security/
+  networking/
+  monitoring/
+envs/
+  dev/
+  prod/
+
+This structure mirrors real enterprise Terraform repositories and supports long‑term scalability.
+
+
+
+
+
+
+
+
+
+
+                           ┌──────────────────────────────────────┐
+                           │              AWS Region              │
+                           └──────────────────────────────────────┘
+                                        │
+                                        ▼
+                     ┌──────────────────────────────────────────────┐
+                     │                    VPC                        │
+                     │         (CIDR: 10.0.0.0/16)                   │
+                     └──────────────────────────────────────────────┘
+                                        │
+        ┌──────────────────────────────────────────────────────────────────────────┐
+        │                                                                          │
+        ▼                                                                          ▼
+┌──────────────────────┐                                             ┌──────────────────────┐
+│   Public Subnet A     │                                             │   Public Subnet B     │
+│  (10.0.1.0/24)        │                                             │  (10.0.2.0/24)        │
+└──────────┬───────────┘                                             └──────────┬───────────┘
+           │                                                                      │
+           ▼                                                                      ▼
+ ┌──────────────────────┐                                             ┌──────────────────────┐
+ │  Application Load     │                                             │  Application Load     │
+ │      Balancer         │  <──────────────  Target Group  ───────────>│      Balancer         │
+ └──────────┬───────────┘                                             └──────────┬───────────┘
+           │                                                                      │
+           └──────────────────────────────┬───────────────────────────────────────┘
+                                          ▼
+                             ┌──────────────────────────┐
+                             │   Auto Scaling Group      │
+                             │  (min/max desired EC2)    │
+                             └───────────┬──────────────┘
+                                         │
+                                         ▼
+                             ┌──────────────────────────┐
+                             │     EC2 Instances        │
+                             │ (Launch Template based)  │
+                             └──────────────────────────┘
+                                         │
+                                         ▼
+                             ┌──────────────────────────┐
+                             │   Private Subnets A/B    │
+                             │   (10.0.3.0/24, 10.0.4.0) │
+                             └──────────────────────────┘
+                                         │
+                                         ▼
+                             ┌──────────────────────────┐
+                             │      NAT Gateway         │
+                             └──────────────────────────┘
+                                         │
+                                         ▼
+                             ┌──────────────────────────┐
+                             │   Internet Gateway       │
+                             └──────────────────────────┘
+
+───────────────────────────────────────────────────────────────────────────────
+                     Additional Infrastructure (to be added)
+───────────────────────────────────────────────────────────────────────────────
+
+   ┌──────────────────────────┐          ┌──────────────────────────┐
+   │        S3 Bucket         │          │       DynamoDB Table     │
+   │   (Terraform backend)    │          │     (State locking)      │
+   └──────────────────────────┘          └──────────────────────────┘
+
+   ┌──────────────────────────┐
+   │      CloudWatch Logs     │
+   │ (ASG + EC2 monitoring)   │
+   └──────────────────────────┘
+
+⚙️ How to Deploy
+1. Choose an environment
+
+cd envs/dev
+
+2. Initialize Terraform
+terraform init
+
+3. Review the plan
+terraform plan
+
+4. Apply the infrastructure
+terraform apply
+
+🎯 Why This Project Matters
+This repository demonstrates real‑world skills expected from a DevOps or Cloud Engineer, including:
+
+Infrastructure as Code (IaC) with Terraform
+
+Modular and environment‑based architecture
+
+AWS networking fundamentals
+
+High‑availability compute design
+
+Load balancing and autoscaling
+
+Remote state management
+
+Security best practices
+
+Production‑ready folder structure
+
+It is intentionally designed to reflect how modern companies structure their cloud infrastructure.

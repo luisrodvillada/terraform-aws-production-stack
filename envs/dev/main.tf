@@ -98,3 +98,16 @@ module "rds" {
   db_user     = "appuser"
   db_password = "ChangeMe123!"
 }
+
+
+//Called Module ECR 
+
+
+
+module "ecr_backend" {
+  source = "../../modules/ecr"
+
+  project_name    = "terraform-aws-stack"
+  environment     = "dev"
+  repository_name = "backend"
+}
