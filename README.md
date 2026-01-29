@@ -1,5 +1,15 @@
 🌐 Terraform AWS Production Stack
 
+
+    Tareas pendiente CI/CD
+
+Mañana validar modulos de CI
+
+
+
+
+
+
 Sample2
 
 A fully modular, production‑ready AWS infrastructure built with Terraform
