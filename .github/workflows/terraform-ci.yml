@@ -8,7 +8,7 @@ on:
 
 jobs:
   terraform-ci:
-    name: Terraform CI (dev)
+    name: Terraform validate
     runs-on: self-hosted
 
     defaults:
@@ -26,7 +26,7 @@ jobs:
         with:
           terraform_version: 1.6.6
 
-      # 3️⃣ Verifica que AWS credentials funcionan
+      # 3️⃣ Verifica que AWS credentials funcionan correctamente
       # (MUY IMPORTANTE para confirmar que el runner está bien configurado)
       - name: Verify AWS identity
         run: aws sts get-caller-identity
