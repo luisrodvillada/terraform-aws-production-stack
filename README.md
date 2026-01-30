@@ -3,7 +3,7 @@
 
     Tareas pendiente CI/CD
 
-Mañana validar modulos de CI
+Mañana validar modulos de CI cada uno de los dos, primero declarar las variables que faltan.
 
 
 

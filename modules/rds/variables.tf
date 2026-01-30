@@ -1,5 +1,14 @@
-variable "project_name" {}
-variable "environment" {}
+variable "project_name" {
+  description = "Nombre del proyecto para identificar recursos del RDS"
+  type        = string
+  default     = "mi_proyecto"
+}
+
+variable "environment" {
+  description = "Ambiente para identificar recursos del RDS (ejemplo: dev, stage, prod)"
+  type        = string
+  default     = "dev"
+}
 
 variable "vpc_id" {}
 variable "private_subnet_ids" {

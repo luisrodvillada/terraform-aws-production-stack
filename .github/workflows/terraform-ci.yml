@@ -1,4 +1,4 @@
-name: Terraform CI
+name: Terraform CI-validate-plan
 
 on:
   pull_request:
