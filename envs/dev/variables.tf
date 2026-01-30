@@ -1,11 +1,12 @@
 
 variable "project_name" {
-  description = "Project name"
+  description = "Nombre del proyecto para identificar recursos en el ambiente dev"
   type        = string
+  default     = "mi_proyecto"
 }
 
 variable "environment" {
-  description = "Environment name (dev, staging, prod)"
+  description = "Ambiente para los recursos (dev, stage, prod)"
   type        = string
+  default     = "dev"
 }
-
